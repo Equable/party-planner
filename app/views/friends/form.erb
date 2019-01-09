@@ -1,0 +1,17 @@
+<%if @error%>
+    <h1><%=@error%></h1>
+<%end%>
+<form method='POST' action='/friends/new'>
+    <label name='planner'>Party Planner: </label>
+    <select name='planner' id='planner' selected=<%=@planner%>>
+    <%@planners.each do |planner|%>
+        <option value=<%="#{planner.id}"%>><%=planner.name%></option>
+    <%end%>
+    </select>
+    <label name='first_name'>Friend First Name: </label>
+    <input type='text' name='first_name' id='first_name' value =<%=@friend_first%>></input>
+    <label name='last_name'>Friend Last Name: </label>
+    <input type='text' name='last_name' id='last_name' value=<%=@friend_last%>></input>
+
+    <button class='btn' type='submit'>Add Friend</button>
+</form>
