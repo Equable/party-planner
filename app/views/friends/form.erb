@@ -3,9 +3,9 @@
 <%end%>
 <form method='POST' action='/friends/new'>
     <label name='planner'>Party Planner: </label>
-    <select name='planner' id='planner' selected=<%=@planner%>>
+    <select name='planner' id='planner'>
     <%@planners.each do |planner|%>
-        <option value=<%="#{planner.id}"%>><%=planner.name%></option>
+        <option value=<%="#{planner.id}"%> <%="selected" if planner.id == @planner.to_i%> ><%=planner.name%></option>
     <%end%>
     </select>
     <label name='first_name'>Friend First Name: </label>

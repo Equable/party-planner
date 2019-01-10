@@ -17,6 +17,22 @@ Dir[File.join(File.dirname(__FILE__), 'app', '**', '*.rb')].each do |file|
   also_reload file
 end
 
+def plannerFriends(id)
+  friends= []
+  Friend.where("party_planner_id = #{Party.find(id).party_planner_id}").each do |friend|
+    friends << friend
+  end
+  return friends
+end
+
+def partyInvites(id)
+  invites=[]
+  FriendsParty.where("party_id = #{params[:id].to_i}").each do |partyfriends|
+    invites << partyfriends
+  end
+  return invites
+end
+
 get '/' do
   redirect '/parties'
 end
@@ -31,6 +47,8 @@ get '/parties/new' do
   @party_name=""
   @party_details=''
   @party_location=''
+  @planners=PartyPlanner.all
+  @planner = PartyPlanner.first
   
   erb :'parties/form'
 end
@@ -39,12 +57,15 @@ post '/parties/new' do
   @party_name=params['name'].strip
   @party_details=params['details'].strip
   @party_location=params['location'].strip
-
+  @planners=PartyPlanner.all
+  @planner = PartyPlanner.find(params['party-planner'].to_i)
+  
+  
   if @party_name==''||@party_details==''||@party_location==''
     @error = 'Please fill all fields'
     return erb :'parties/form'
   else
-    Party.create({name: @party_name, details: @party_details, location: @party_location})
+    Party.create({name: @party_name, details: @party_details, location: @party_location, party_planner_id: @planner.id})
     flash[:notice] = "Succesfully Submitted Party"
     redirect "/parties/#{Party.last.id}"
   end
@@ -53,6 +74,9 @@ end
 
 get '/parties/:id' do
   @party = Party.find(params[:id])
+  @invites = partyInvites(params[:id])
+  @friends = plannerFriends(params[:id])
+
   erb :'parties/show'
 end
 
@@ -76,7 +100,7 @@ post '/friends/new' do
   @planner = params['planner']
   @planners = PartyPlanner.all
 
-  if @friend_last==''||@friend_first=='' 
+  if @friend_last==''||@friend_first==''
     @error = 'Please fill all fields'
 
     erb :'friends/form'
@@ -88,4 +112,14 @@ post '/friends/new' do
 
 end
 
-binding.pry
+post '/invite/:id' do
+   commit = FriendsParty.create(party_id: params['id'], friend_id: params['to_invite'])
+   if commit.valid?
+      flash[:notice]= "Friend added"
+      redirect "/parties/#{params["id"]}"
+   else
+    flash[:notice]="Friend already in party list"
+    redirect "/parties/#{params["id"]}"
+   end
+
+end

@@ -18,8 +18,8 @@ end
 
 Party.delete_all
 parties_attributes = [
-    {name: "The Big One", details:"Big party", location:"Big House"},
-    {name: "The Small One", details:"It'll be bigger than the big one", location:"'Small' House"}
+    {name: "The Big One", details:"Big party", location:"Big House", party_planner: planner},
+    {name: "The Small One", details:"It'll be bigger than the big one", location:"'Small' House", party_planner: planner}
 ]
 
 parties_attributes.each do |attributes|

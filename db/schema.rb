@@ -35,8 +35,10 @@ ActiveRecord::Schema.define(version: 2019_01_09_201556) do
     t.string "name", null: false
     t.text "details", null: false
     t.string "location", null: false
+    t.bigint "party_planner_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["party_planner_id"], name: "index_parties_on_party_planner_id"
   end
 
   create_table "party_planners", force: :cascade do |t|

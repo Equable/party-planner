@@ -4,6 +4,7 @@ class CreateParties < ActiveRecord::Migration[5.2]
       table.string :name, null: false
       table.text :details, null: false
       table.string :location, null: false
+      table.belongs_to :party_planner, null: false
 
       table.timestamps null: false
     end

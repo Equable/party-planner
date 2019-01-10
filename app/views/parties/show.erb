@@ -3,3 +3,25 @@
 <h1><%=@party.name%></h1>
 <p>Details: <%= @party.details%></p>
 <h6>Location: <%=@party.location%></h6>
+<h6>Invitees:</h6>
+<ul>
+    <%if !@invites%>
+        <h6>No Invites yet!</h6>
+    <%end%>
+    <%@invites.each do |invite|%>
+        <li>
+            <%="#{invite.friend.first_name} #{invite.friend.last_name}"%>
+        </li>
+    <%end%>
+</ul>
+
+<form method='POST' action='/invite/<%=@party.id%>'>
+    <label name='to_invite'>Invite Friends:
+    <select name='to_invite' id='to_invite'>
+    <%@friends.each do |friend|%>
+        <option value=<%=friend.id%>><%=friend.first_name%> <%=friend.last_name%></option>
+    <%end%>
+    </select>
+
+    <button class='btn' type='submit'>Add Friend</button>
+</form>
